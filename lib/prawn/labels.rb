@@ -50,6 +50,7 @@ module Prawn
       type["left_margin"] ||= 36
 
       options[:document] ||= {}
+      options[:repeat] ||= 1
 
       options.merge!(:vertical_text => true) if type["vertical_text"]
 
@@ -66,8 +67,10 @@ module Prawn
         if (defined? record.vertical_text)
           options.merge!(:vertical_text => record.vertical_text)
         end
-        create_label(index, record, options) do |pdf, record|
-          yield pdf, record
+        options[:repeat].times.each do |repeat|
+          create_label(index + repeat, record, options) do |pdf, record|
+            yield pdf, record
+          end
         end
       end
 
